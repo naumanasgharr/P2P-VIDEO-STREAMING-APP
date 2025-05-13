@@ -5,6 +5,17 @@
     <x-auth-session-status class="text-center" :status="session('status')" />
 
     <form wire:submit="register" class="flex flex-col gap-6">
+        <!-- USERNAME -->
+        <flux:input
+            wire:model="username"
+            :label="__('username')"
+            type="text"
+            required
+            autofocus
+            autocomplete="username"
+            :placeholder="__('username')"
+        />
+        
         <!-- Name -->
         <flux:input
             wire:model="name"
