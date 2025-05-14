@@ -29,7 +29,7 @@ Route::view('manageContent','manage_content')->middleware(['auth', 'verified'])-
 Route::view('newParty','new_party')->middleware(['auth', 'verified'])->name('newParty');
 Route::view('joinParty','join_party')->middleware(['auth', 'verified'])->name('joinParty');
 
-// sending a request 
+// sending a friend request to a user
 Route::post('/sendRequest',[\App\Http\Controllers\FriendshipsController::class,'sendRequest'])->middleware(['auth', 'verified'])->name('sendRequest');
 
 require __DIR__.'/auth.php';
