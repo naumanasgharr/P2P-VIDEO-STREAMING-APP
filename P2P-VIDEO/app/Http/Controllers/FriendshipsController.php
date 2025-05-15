@@ -66,6 +66,50 @@ class FriendshipsController extends Controller
         
     }
 
+    public function manageFriends() {
+        $friendRequests = friendships::where('friend_id', auth()->id())
+        ->where('accepted', false)
+        ->with('user')
+        ->get();
+
+        $friends = friendships::where('user_id',auth()->id())->where('accepted',true)->with('friend')->get();
+
+        return view('manage_friends', compact('friendRequests','friends'));
+    }
+
+    public function accepted(Request $request) {
+        $user = auth()->user()->id;
+        $friendID = $request->friendId;
+        $updated = friendships::where('user_id',$friendID)->where('friend_id',$user)->where('accepted',false)->update(['accepted'=>true]);
+        if($updated) {
+            \Log::info('UPDATED');
+            friendships::create(['user_id'=>$user,'friend_id'=>$friendID,'accepted'=>true]);
+        }
+        else {
+            return back()->with('error','oops, something didnt work');
+        }
+        
+
+        return back()->with('accepted','Friend has been added');
+    }
+
+    public function rejected(Request $request) {
+        $user = auth()->user()->id;
+        $friendID = $request->friendId;
+        \Log::info('rejectuserid' . $user);
+        \Log::info('rejectfriendid' . $friendID);
+        friendships::where('user_id',$friendID)->where('friend_id',$user)->delete();
+        return back()->with('rejected','Request Rejected');
+    }
+
+    public function removeFriend(Request $request) {
+        $user = auth()->user()->id;
+        $friendID = $request->friendId;
+        friendships::where('user_id',$user)->where('friend_id',$friendID)->delete();
+        friendships::where('user_id',$friendID)->where('friend_id',$user)->delete();
+        return back()->with('removed','Removed friend');
+    }
+
     /**
      * Store a newly created resource in storage.
      */

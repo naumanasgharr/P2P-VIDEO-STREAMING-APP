@@ -26,7 +26,7 @@ Route::middleware(['auth'])->group(function () {
 
 //button redirections
 Route::view('addFriends','components.searchbar')->name('addFriends');
-Route::view('manageFriends','manage_friends')->middleware(['auth', 'verified'])->name('manageFriends');
+Route::get('manageFriends',[\App\Http\Controllers\FriendshipsController::class,'manageFriends'])->middleware(['auth', 'verified'])->name('manageFriends');
 Route::view('uploadContent','upload_content')->middleware(['auth', 'verified'])->name('uploadContent');
 Route::view('manageContent','manage_content')->middleware(['auth', 'verified'])->name('manageContent');
 Route::view('newParty','new_party')->middleware(['auth', 'verified'])->name('newParty');
@@ -34,5 +34,7 @@ Route::view('joinParty','join_party')->middleware(['auth', 'verified'])->name('j
 
 // sending a friend request to a user
 Route::post('/sendRequest',[\App\Http\Controllers\FriendshipsController::class,'sendRequest'])->middleware(['auth', 'verified'])->name('sendRequest');
-
+Route::get('/requestAccepted/{friendId}',[\App\Http\Controllers\FriendshipsController::class,'accepted'])->middleware(['auth', 'verified'])->name('requestAccepted');
+Route::get('/requestRejected/{friendId}',[\App\Http\Controllers\FriendshipsController::class,'rejected'])->middleware(['auth', 'verified'])->name('requestRejected');
+Route::get('/removeFriend/{friendId}',[\App\Http\Controllers\FriendshipsController::class,'removeFriend'])->middleware(['auth', 'verified'])->name('removeFriend');
 require __DIR__.'/auth.php';
