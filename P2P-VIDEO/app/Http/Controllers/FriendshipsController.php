@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\friendRequestSent;
 use App\Models\friendships;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -53,8 +54,16 @@ class FriendshipsController extends Controller
         }
 
         //creating freindship record in db and sending success response
-        friendships::create(['user_id'=>$user_id,'friend_id'=>$friend_id,'accepted'=>false]);
+        $request = friendships::create(['user_id'=>$user_id,'friend_id'=>$friend_id,'accepted'=>false]);
+        
+        //sending notification
+        \Log::info('Broadcasting to : '. $friend_id);
+        broadcast(new FriendRequestSent($request))->toOthers();
+        
         return back()->with('success','Request has been sent successfully');
+
+
+        
     }
 
     /**
