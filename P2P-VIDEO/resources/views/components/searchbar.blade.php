@@ -24,31 +24,81 @@
             </button>
         </div>
     </form>
+
     @if(session('success'))
-        <div class="bg-green-500 text-white p-4 rounded-lg mb-4">
+        <div id="flash-message" class="bg-green-500 text-white p-3 rounded-md mb-4 w-full max-w-md mx-auto text-center shadow-lg transition-opacity duration-500">
             {{ session('success') }}
         </div>
+        <script>
+            setTimeout(() => {
+                const el = document.getElementById('flash-message');
+                if (el) {
+                    el.style.opacity = 0;
+                    setTimeout(() => el.remove(), 500);
+                }
+            }, 2000);
+        </script>
+
     @endif
 
     @if(session('error1'))
-        <div class="bg-red-500 text-white p-4 rounded-lg mb-4">
+        <div id="flash-message" class="bg-red-500 text-white p-3 rounded-md mb-4 w-full max-w-md mx-auto text-center shadow-lg transition-opacity duration-500">
             {{ session('error1') }}
         </div>
+        <script>
+            setTimeout(() => {
+                const el = document.getElementById('flash-message');
+                if (el) {
+                    el.style.opacity = 0;
+                    setTimeout(() => el.remove(), 500);
+                }
+            }, 2000);
+        </script>
     @endif
+
     @if(session('error2'))
-        <div class="bg-red-500 text-white p-4 rounded-lg mb-4">
+        <div id="flash-message" class="bg-red-500 text-white p-3 rounded-md mb-4 w-full max-w-md mx-auto text-center shadow-lg transition-opacity duration-500">
             {{ session('error2') }}
         </div>
+        <script>
+            setTimeout(() => {
+                const el = document.getElementById('flash-message');
+                if (el) {
+                    el.style.opacity = 0;
+                    setTimeout(() => el.remove(), 500);
+                }
+            }, 2000);
+        </script>
     @endif
+
     @if(session('error3'))
-        <div class="bg-red-500 text-white p-4 rounded-lg mb-4">
+        <div id="flash-message" class="bg-red-500 text-white p-3 rounded-md mb-4 w-full max-w-md mx-auto text-center shadow-lg transition-opacity duration-500">
             {{ session('error3') }}
         </div>
+        <script>
+            setTimeout(() => {
+                const el = document.getElementById('flash-message');
+                if (el) {
+                    el.style.opacity = 0;
+                    setTimeout(() => el.remove(), 500);
+                }
+            }, 2000);
+        </script>
     @endif
 
     @if(session('info'))
-        <div class="bg-blue-500 text-white p-4 rounded-lg mb-4">
+        <div id="flash-message" class="bg-blue-500 text-white p-3 rounded-md mb-4 w-full max-w-md mx-auto text-center shadow-lg transition-opacity duration-500">
             {{ session('info') }}
         </div>
+        <script>
+            setTimeout(() => {
+                const el = document.getElementById('flash-message');
+                if (el) {
+                    el.style.opacity = 0;
+                    setTimeout(() => el.remove(), 500);
+                }
+            }, 2000);
+        </script>
     @endif
+    
 @endsection
