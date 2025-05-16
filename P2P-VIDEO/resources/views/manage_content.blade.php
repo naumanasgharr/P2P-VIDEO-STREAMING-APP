@@ -4,10 +4,10 @@
     </div>
 
     @foreach ($fileList as $file)
-    <div style="background-color:aliceblue;width:40%; border: 1px solid; border-radius: 5px; margin: 5px; box-shadow:2px 5px black; display: flex; justify-content:space-between; align-items:center;">
-    <span style="font-size:15px; color: black; margin: 2px;font-weight:bold;">{{$file['name']}}</span>
-    <button onclick="window.location='{{route('removeContent',['file'=>$file['url']])}}'" style="border:1px solid black; margin:5px; padding: 2px; font-weight: bold; box-shadow: 1px 1px black; background-color: red;">remove</button>
-    </div>
+        <div style="background-color:aliceblue;width:40%; border: 1px solid; border-radius: 5px; margin: 5px; box-shadow:2px 5px black; display: flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:15px; color: black; margin: 2px;font-weight:bold;">{{$file['name']}}</span>
+            <button onclick="window.location='{{route('removeContent',['file'=>$file['url']])}}'" style="border:1px solid black; margin:5px; padding: 2px; font-weight: bold; box-shadow: 1px 1px black; background-color: red;">remove</button>
+        </div>
     @endforeach
 
     @if(session('success'))

@@ -12,7 +12,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::view('dashboard', 'dashboard')
+Route::view('/dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
@@ -28,7 +28,7 @@ Route::middleware(['auth'])->group(function () {
 Route::view('addFriends','components.searchbar')->name('addFriends');
 Route::get('manageFriends',[\App\Http\Controllers\FriendshipsController::class,'manageFriends'])->middleware(['auth', 'verified'])->name('manageFriends');
 Route::view('uploadContent','upload_content')->middleware(['auth', 'verified'])->name('uploadContent');
-Route::view('newParty','new_party')->middleware(['auth', 'verified'])->name('newParty');
+//Route::view('newParty','new_party')->middleware(['auth', 'verified'])->name('newParty');
 Route::view('joinParty','join_party')->middleware(['auth', 'verified'])->name('joinParty');
 
 //friend requests
@@ -37,11 +37,16 @@ Route::get('/requestAccepted/{friendId}',[\App\Http\Controllers\FriendshipsContr
 Route::get('/requestRejected/{friendId}',[\App\Http\Controllers\FriendshipsController::class,'rejected'])->middleware(['auth', 'verified'])->name('requestRejected');
 Route::get('/removeFriend/{friendId}',[\App\Http\Controllers\FriendshipsController::class,'removeFriend'])->middleware(['auth', 'verified'])->name('removeFriend');
 
-//upload-manage content
+//upload-manage-remove content
 Route::post('/uploadContent',[\App\Http\Controllers\ContentController::class,'store'])->middleware(['auth','verified'])->name('contentUpload');
 Route::get('/manageContent',[\App\Http\Controllers\ContentController::class,'manage'])->middleware(['auth', 'verified'])->name('manageContent');
-
-//remove content
 Route::get('/removeContent',[\App\Http\Controllers\ContentController::class,'remove'])->middleware(['auth', 'verified'])->name('removeContent');
+
+//start-party
+Route::get('/newParty',[\App\Http\Controllers\RoomController::class,'index'])->middleware(['auth', 'verified'])->name('newParty');
+Route::get('/party',[\App\Http\Controllers\RoomController::class,'party'])->middleware(['auth', 'verified'])->name('party');
+
+Route::get('/endParty',[\App\Http\Controllers\RoomController::class,'endParty'])->middleware(['auth','verified'])->name('endParty');
+Route::get('/leaveParty',[\App\Http\Controllers\RoomController::class,'leaveParty'])->middleware(['auth','verified'])->name('leaveParty');
 
 require __DIR__.'/auth.php';
