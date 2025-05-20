@@ -28,8 +28,6 @@ Route::middleware(['auth'])->group(function () {
 Route::view('addFriends','components.searchbar')->name('addFriends');
 Route::get('manageFriends',[\App\Http\Controllers\FriendshipsController::class,'manageFriends'])->middleware(['auth', 'verified'])->name('manageFriends');
 Route::view('uploadContent','upload_content')->middleware(['auth', 'verified'])->name('uploadContent');
-//Route::view('newParty','new_party')->middleware(['auth', 'verified'])->name('newParty');
-Route::view('joinParty','join_party')->middleware(['auth', 'verified'])->name('joinParty');
 
 //friend requests
 Route::post('/sendRequest',[\App\Http\Controllers\FriendshipsController::class,'sendRequest'])->middleware(['auth', 'verified'])->name('sendRequest');
@@ -48,5 +46,9 @@ Route::get('/party',[\App\Http\Controllers\RoomController::class,'party'])->midd
 
 Route::get('/endParty',[\App\Http\Controllers\RoomController::class,'endParty'])->middleware(['auth','verified'])->name('endParty');
 Route::get('/leaveParty',[\App\Http\Controllers\RoomController::class,'leaveParty'])->middleware(['auth','verified'])->name('leaveParty');
-
+ 
+//join party
+Route::view('join_party','join_party')->middleware(['auth','verified'])->name('join_party');
+Route::post('/joinParty',[\App\Http\Controllers\RoomController::class,'joinParty'])->middleware(['auth', 'verified'])->name('joinParty');
+Route::get('/showParty',[\App\Http\Controllers\RoomController::class,'showParty'])->middleware(['auth', 'verified'])->name('showParty');
 require __DIR__.'/auth.php';

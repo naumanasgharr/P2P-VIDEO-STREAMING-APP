@@ -10,33 +10,29 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PartyEnded implements ShouldBroadcast
+class VideoPaused implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public $roomKey;
-    public function __construct($roomKey)
+    public $room_id;
+    public $time;
+    public function __construct($room_id,$time)
     {
-        \Log::info("inside construct function PartyEnded");
-        $this->roomKey = $roomKey;
+        //
+        $this->roomId = $room_id;
+        $this->time = $time;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     */
+    
     public function broadcastOn()
     {
-        \Log::info("broadcasting PartyEnded on ". $this->roomKey);
-        return new Channel('party.' . $this->roomKey);
+        return new Channel('room.' . $this->room_id);
     }
-
-    public function broadcastAs()
-    {
-        \Log::info('broadcast as function entered');
-        return 'PartyEnded';
+    
+    public function broadcastAs() {
+        return 'VideoPaused';
     }
 }

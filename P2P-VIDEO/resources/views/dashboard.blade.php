@@ -19,7 +19,7 @@
                 <button id="manageContentButton" onclick="window.location='{{route('manageContent')}}'" class="w-full aspect-video rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 active:scale-95 transition-all duration-200 text-gray-800 dark:text-gray-100 text-lg font-medium shadow-sm">MANAGE CONTENT</button>
             </div>
             <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <button onclick="window.location='{{route('joinParty')}}'" id="joinPartyButton" class="w-full aspect-video rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 active:scale-95 transition-all duration-200 text-gray-800 dark:text-gray-100 text-lg font-medium shadow-sm">JOIN A PARTY</button>
+                <button onclick="window.location='{{route('join_party')}}'" id="joinPartyButton" class="w-full aspect-video rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 active:scale-95 transition-all duration-200 text-gray-800 dark:text-gray-100 text-lg font-medium shadow-sm">JOIN A PARTY</button>
             </div>
         </div>
     </div>

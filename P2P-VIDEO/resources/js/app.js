@@ -1,4 +1,7 @@
 import './echo';
+import axios from 'axios';
+
+window.axios = axios;
 
 console.log("👀 Echo listener script loaded");
 const userId = document.head.querySelector('meta[name="user-id"]').content;
