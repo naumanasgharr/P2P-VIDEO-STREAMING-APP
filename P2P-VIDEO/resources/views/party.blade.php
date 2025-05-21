@@ -28,7 +28,7 @@
                 <div id="chat-box" class="flex-1 p-3 overflow-y-auto space-y-2">
 
                 </div>
-                <form method="POST" class="flex p-3 border-t border-gray-600">
+                <form id="messageForm" action="/messages" method="POST" class="flex p-3 border-t border-gray-600">
                     @csrf
                     <input type="text" name="message" placeholder="Type a message..." class="flex-1 bg-gray-800 text-white px-3 py-2 rounded-l focus:outline-none focus:ring focus:ring-purple-500">
                     <button type="submit" class="bg-purple-600 px-4 py-2 rounded-r hover:bg-purple-700">Send</button>
@@ -78,50 +78,90 @@
             console.log('hellooo');
             window.location.href = "{{ route('dashboard') }}";
         });
+
+        function broadcastVideoEvent(eventName,time) {
+            fetch(`/api/video/event`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'Application/json'
+                },
+                body: JSON.stringify({
+                    event: eventName,
+                    time: time,
+                    room_key: @json($room_key)
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.error('Failed to send event');
+                }
+            })
+            .catch(error => console.error('Fetch error:', error));
+        }
     
         const video = document.querySelector('#videoPlayer');
         let isRemote = false;
 
         video.addEventListener('play',()=>{
+            if (isRemote) {
+                return;
+            }
             broadcastVideoEvent('VideoPlayed',video.currentTime)
         });
-        video.addEventListener('pause',()=>{
+
+        video.addEventListener('pause' ,()=>{
+            if (isRemote) {
+                return;
+            }
             broadcastVideoEvent('VideoPaused', video.currentTime)
         });
+        
         video.addEventListener('seeked',()=>{
+            if (isRemote) {
+                return;
+            }
             broadcastVideoEvent('VideoSeeked', video.currentTime)
         });
 
-        function broadcastVideoEvent(eventName, time) {
-            axios.post(`/api/video/event`, {
-            event: eventName,
-            time: time,
-            room_key: {{$room_key}}
-        }
-        )};
+        
+        let playOnce = 0;
 
         echo.channel('room.{{$room_key}}')
-        .subscribed((=>{
-            console.log('subscribed on room.{{room_key}}')
-        }))
+        .subscribed(()=>{
+            console.log('subscribed on room.{{$room_key}}')
+        })
         .listen('.VideoPlayed',(e)=>{
             isRemote = true;
-            video.currentTime = e.time;
+            console.log('video played');
+            console.log("current time:: ",video.currentTime);
+            console.log("e.time:: ",e.time);
+            if(playOnce == 0) {
+                video.currentTime = e.time;
+                playOnce++;
+            }
             video.play();
+            
             setTimeout(() => isRemote = false, 500);
         })
         .listen('.VideoPaused',(e)=>{
             isRemote = true;
-            video.currentTime = e.time;
+            console.log('video paused');
+            let timeDif = Math.abs(video.currentTime - e.time);
+            if(timeDif > 0.5) {
+                video.currentTime = e.time;
+            }
             video.pause();
             setTimeout(() => isRemote = false, 500);
         })
         .listen('.VideoSeeked',(e)=>{
             isRemote = true;
-            video.currentTime = e.time;
+            let timeDif = Math.abs(video.currentTime - e.time);
+            if(timeDif > 0.5) {
+                video.currentTime = e.time;
+            }
+            console.log('video seeked');
             setTimeout(() => isRemote = false, 500);
         });
-  
     </script>
 </body>
 </html>

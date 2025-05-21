@@ -6,6 +6,7 @@ use App\Livewire\Settings\Profile;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Http\Request;
 
 Broadcast::routes(['middleware' => ['auth']]);
 Route::get('/', function () {
@@ -51,4 +52,18 @@ Route::get('/leaveParty',[\App\Http\Controllers\RoomController::class,'leavePart
 Route::view('join_party','join_party')->middleware(['auth','verified'])->name('join_party');
 Route::post('/joinParty',[\App\Http\Controllers\RoomController::class,'joinParty'])->middleware(['auth', 'verified'])->name('joinParty');
 Route::get('/showParty',[\App\Http\Controllers\RoomController::class,'showParty'])->middleware(['auth', 'verified'])->name('showParty');
+
+//messages
+/*Route::post('/messages', function (Request $request) {
+    $message = $request->input('message');
+    //$room_key = $request->room_key;
+    //$user = User::where('id', auth()->user()->id)->first();
+    $username = auth()->user()->username;
+    \Log::info('username: '. $username);
+    //\Log::info('room_key: '. $room_key);
+    \Log::info('message: '. $message);
+    return back()->with('done','done');
+})->middleware(['auth','verified'])->name('messages');*/
+
+
 require __DIR__.'/auth.php';

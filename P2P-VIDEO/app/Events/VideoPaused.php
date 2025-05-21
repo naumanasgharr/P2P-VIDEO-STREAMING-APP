@@ -17,18 +17,19 @@ class VideoPaused implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public $room_id;
-    public $time;
-    public function __construct($room_id,$time)
+    public string $room_id;
+    public float $time;
+    public function __construct(string $room_id, float $time)
     {
         //
-        $this->roomId = $room_id;
+        $this->room_id = $room_id;
         $this->time = $time;
     }
 
     
     public function broadcastOn()
     {
+        \Log::info("broadcasting VideoPaused room.".$this->room_id);
         return new Channel('room.' . $this->room_id);
     }
     
