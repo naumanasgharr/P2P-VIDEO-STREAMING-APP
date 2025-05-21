@@ -64,6 +64,12 @@ Route::get('/showParty',[\App\Http\Controllers\RoomController::class,'showParty'
     \Log::info('message: '. $message);
     return back()->with('done','done');
 })->middleware(['auth','verified'])->name('messages');*/
-
+Route::post('/send-message',function (Request $request){
+    $message = $request->message;
+    $room_key = $request->room_key;
+    $username = auth()->user()->username;
+    \Log::info('key: '. $room_key .' message: '. $message);
+    broadcast(new \App\Events\SendMessage($room_key,$message,$username))->toOthers();
+})->middleware(['auth','verified'])->name('send-message');
 
 require __DIR__.'/auth.php';
