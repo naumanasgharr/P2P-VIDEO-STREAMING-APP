@@ -15,7 +15,7 @@
         <div class="flex gap-2 bg-gray-800 rounded-lg shadow-lg p-1">
             <!-- Video Section -->
             <div>
-                <video id="videoPlayer" controls class="w-[99%] h-[99%] bg-black rounded-lg">
+                <video id="videoPlayer" preload="auto" controls class="w-[99%] h-[99%] bg-black rounded-lg">
                     <source src={{$url}} type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
@@ -126,34 +126,32 @@
             broadcastVideoEvent('VideoSeeked', video.currentTime)
         });
 
-        function setTime() {
-            if (video.readyState >= 3) {
-                console.log('here',video.currentTime + 1);
-                video.currentTime = video.currentTime + 1;
-            } else {
-                video.addEventListener('loadedmetadata', () => {
-                video.currentTime = video.currentTime + 1;
-                }, { once: true }); // remove listener automatically after first call
-            }
-        }
-
         echo.channel('room.{{$room_key}}')
         .subscribed(()=>{
             console.log('subscribed on room.{{$room_key}}')
         })
         .listen('.VideoPlayed',(e)=>{
             isRemote = true;
+            let timeDif = Math.abs(video.currentTime - e.time);
+            if(timeDif > 0.3) {
+                video.currentTime = e.time;
+            }
             video.play();
 
             setTimeout(() => isRemote = false, 500);
         })
         .listen('.VideoPaused',(e)=>{
             isRemote = true;
+            video.currentTime = e.time;
             video.pause();
             setTimeout(() => isRemote = false, 500);
         })
         .listen('.VideoSeeked',(e)=>{
             isRemote = true;
+            let timeDif = Math.abs(video.currentTime - e.time);
+            if(timeDif > 0.3) {
+                video.currentTime = e.time;
+            }
             console.log('video seeked',e.time);
             setTimeout(() => isRemote = false, 500);
         });
