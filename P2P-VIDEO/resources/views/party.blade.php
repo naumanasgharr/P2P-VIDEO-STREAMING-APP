@@ -126,36 +126,35 @@
             broadcastVideoEvent('VideoSeeked', video.currentTime)
         });
 
+        function setTime() {
+            if (video.readyState >= 3) {
+                console.log('here',video.currentTime + 1);
+                video.currentTime = video.currentTime + 1;
+            } else {
+                video.addEventListener('loadedmetadata', () => {
+                video.currentTime = video.currentTime + 1;
+                }, { once: true }); // remove listener automatically after first call
+            }
+        }
+
         echo.channel('room.{{$room_key}}')
         .subscribed(()=>{
             console.log('subscribed on room.{{$room_key}}')
         })
         .listen('.VideoPlayed',(e)=>{
             isRemote = true;
-            console.log('video played');
-            
-            video.currentTime = e.time;
             video.play();
-            
+
             setTimeout(() => isRemote = false, 500);
         })
         .listen('.VideoPaused',(e)=>{
             isRemote = true;
-            console.log('video paused');
-            let timeDif = Math.abs(video.currentTime - e.time);
-            if(timeDif > 0.5) {
-                video.currentTime = e.time;
-            }
             video.pause();
             setTimeout(() => isRemote = false, 500);
         })
         .listen('.VideoSeeked',(e)=>{
             isRemote = true;
-            let timeDif = Math.abs(video.currentTime - e.time);
-            if(timeDif > 0.5) {
-                video.currentTime = e.time;
-            }
-            console.log('video seeked');
+            console.log('video seeked',e.time);
             setTimeout(() => isRemote = false, 500);
         });
 
