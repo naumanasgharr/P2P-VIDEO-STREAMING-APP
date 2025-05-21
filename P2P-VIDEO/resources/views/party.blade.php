@@ -27,7 +27,7 @@
                     <p style="font-size:11px">invite link: {{$room_key}}</p>
                 </div>
             
-                <div id="chat-box" class="flex-1 p-3 overflow-y-auto space-y-2">
+                <div id="chat-box" class="flex-1 p-3 overflow-y-auto space-y-2 overflow-x-hidden">
 
                 </div>
             
@@ -85,7 +85,8 @@
             fetch(`/api/video/event`,{
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'Application/json'
+                    'Content-Type': 'Application/json',
+                    "X-Socket-Id": echo.socketId()
                 },
                 body: JSON.stringify({
                     event: eventName,
@@ -125,9 +126,6 @@
             broadcastVideoEvent('VideoSeeked', video.currentTime)
         });
 
-        
-        let playOnce = 0;
-
         echo.channel('room.{{$room_key}}')
         .subscribed(()=>{
             console.log('subscribed on room.{{$room_key}}')
@@ -135,12 +133,8 @@
         .listen('.VideoPlayed',(e)=>{
             isRemote = true;
             console.log('video played');
-            console.log("current time:: ",video.currentTime);
-            console.log("e.time:: ",e.time);
-            if(playOnce == 0) {
-                video.currentTime = e.time;
-                playOnce++;
-            }
+            
+            video.currentTime = e.time;
             video.play();
             
             setTimeout(() => isRemote = false, 500);
@@ -185,7 +179,9 @@
                 const chatBox = document.querySelector('#chat-box');
                 const messageElement = document.createElement('div');
                 messageElement.innerHTML = `<strong>YOU: </strong> ${message}`;
+                messageElement.style = 'break-words;';
                 chatBox.appendChild(messageElement);
+                chatBox.scrollTop = chatBox.scrollHeight;
                 messageInput.value = '';
             }
         });
@@ -199,6 +195,7 @@
             const messageElement = document.createElement('div');
             messageElement.innerHTML = `<strong>${e.username}: </strong> ${e.message}`;
             chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
         });
     </script>
 </body>
