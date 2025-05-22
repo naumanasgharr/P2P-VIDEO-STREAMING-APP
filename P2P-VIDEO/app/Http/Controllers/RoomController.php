@@ -77,11 +77,13 @@ class RoomController extends Controller
         $room_key = $request->query('uuid');
         \Log::info( $room_key);
         $success = Room::where('room_key',$room_key)->where('user1_id', $id)->delete();
-        event(new PartyEnded($room_key));
         if(!$success) {
             return back()->with('error','you are not the initiator of this party');
+        }
+        else {
+            event(new PartyEnded($room_key));    
+            return view('dashboard');
         }    
-        return view('dashboard');
     }
 
     //leave party
