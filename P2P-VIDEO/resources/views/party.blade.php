@@ -13,7 +13,6 @@
 
     <div class="flex items-center justify-center w-full h-full">
         <div class="flex gap-2 bg-gray-800 rounded-lg shadow-lg p-1">
-            <!-- Video Section -->
             <div>
                 <video id="videoPlayer" preload="auto" controls class="w-[99%] h-[99%] bg-black rounded-lg">
                     <source src={{$url}} type="video/mp4">
@@ -21,7 +20,6 @@
                 </video>
             </div>
 
-            <!-- Chat Section -->
             <div class="w-[350px] h-[470px] bg-gray-700 rounded-lg shadow-md flex flex-col">
                 <div class="p-3 m-0 border-b border-gray-600 font-semibold">
                     <p style="font-size:11px">invite link: {{$room_key}}</p>
@@ -64,7 +62,7 @@
             broadcaster: 'pusher',
             key: '{{ env("PUSHER_APP_KEY") }}',
             cluster: '{{ env("PUSHER_APP_CLUSTER") }}',
-            forceTLS: true, // use true if using HTTPS
+            forceTLS: true,
             wsHost: window.location.hostname,
             wsPort: 6001,
             disableStats: true,
@@ -72,10 +70,10 @@
         console.log('working');
         echo.channel("party.{{ $room_key }}")
         .subscribed(() => {
-            console.log("✅ Subscribed to channel: party.{{ $room_key }}");
+            console.log("Subscribed to channel: party.{{ $room_key }}");
         })
         .error((error) => {
-            console.error("❌ Channel subscription error:", error);
+            console.error("Channel subscription error:", error);
         })
         .listen('.PartyEnded', () => {
             window.location.href = "{{ route('dashboard') }}";
